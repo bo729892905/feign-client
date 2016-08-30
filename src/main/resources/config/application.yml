@@ -1,0 +1,30 @@
+# Web容器配置
+server:
+  port: 8082
+
+eureka:
+  instance:
+    instanceId: ${spring.cloud.client.hostname}:${server.port}
+    preferIpAddress: true
+  client:
+    registerWithEureka: false
+    fetchRegistry: true
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+hystrix:
+  command:
+    default:
+      execution:
+        # Global Hystrix timeout(ms)
+        isolation.thread.timeoutInMilliseconds: 30000
+  threadpool:
+    default:
+      coreSize: 300
+      maxQueueSize: 100
+      queueSizeRejectionThreshold: 5
+
+info:
+  component: feign-client
