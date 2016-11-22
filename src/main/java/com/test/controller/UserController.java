@@ -10,17 +10,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 /**
  * Created by ren.xiaobo on 2016/8/29.
  */
 @Controller
-@RequestMapping("user")
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value="{id}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/{id}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody User getUser(@PathVariable("id") String id) {
         return userService.getUser(Long.parseLong(id));
+    }
+
+    @RequestMapping(value="/",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<User> getUsers() {
+        List<User> userList = userService.getUsers();
+        return userList;
     }
 }
