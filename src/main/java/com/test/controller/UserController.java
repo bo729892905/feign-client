@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -16,19 +17,29 @@ import java.util.List;
  * Created by ren.xiaobo on 2016/8/29.
  */
 @Controller
-@RequestMapping("/users")
+@RequestMapping("users")
 public class UserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @RequestMapping(value="/{id}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @RequestMapping(value="{id}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody User getUser(@PathVariable("id") String id) {
         return userService.getUser(Long.parseLong(id));
     }
 
     @RequestMapping(value="/",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<User> getUsers() {
-        List<User> userList = userService.getUsers();
-        return userList;
+        return userService.getUsers();
+    }
+
+    @RequestMapping(value="index.html",method = RequestMethod.GET)
+    public ModelAndView index() {
+        ModelAndView mv = new ModelAndView("index");
+        mv.addObject("username", "张三");
+        return mv;
     }
 }
